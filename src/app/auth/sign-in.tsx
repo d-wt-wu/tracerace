@@ -3,6 +3,9 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { KeyboardAvoidingView, Platform, Pressable, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { authClient } from '../../lib/auth-client';
+import { request } from '../../lib/api';
+import { API_URL } from '../../config/api';
+import { googleRedirectURL } from '../../domain/oauth';
 import { useAuth } from '../../state/AuthProvider';
 import { Button, Icon, Mark, Page } from '../../ui/components';
 import { AppHeader, Field, GoogleButton, Notice } from '../../ui/account';
@@ -102,16 +105,27 @@ export default function SignIn() {
     }
     setGoogleBusy(true);
     try {
+      if (Platform.OS === 'web') {
+        const result = await request<{ url: string }>('/api/auth/sign-in/social', {
+          method: 'POST',
+          body: {
+            provider: 'google',
+            callbackURL: callback(),
+            errorCallbackURL: callback(),
+            disableRedirect: true,
+          },
+        });
+        window.location.assign(googleRedirectURL(result.url, API_URL));
+        return;
+      }
       const result = await authClient.signIn.social({
         provider: 'google',
         callbackURL: callback(),
         errorCallbackURL: callback(),
       });
       if (result.error) throw new Error(result.error.message);
-      if (Platform.OS !== 'web') {
-        await auth.refreshSession();
-        router.replace('/auth/callback');
-      }
+      await auth.refreshSession();
+      router.replace('/auth/callback');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Google sign-in was cancelled. Please try again.');
     } finally {
