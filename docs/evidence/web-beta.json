@@ -1,0 +1,116 @@
+{
+  "version": "0.4.0",
+  "verifiedDate": "2026-11-08",
+  "publicURL": "https://tracerace.onrender.com",
+  "sourceURL": "https://github.com/d-wt-wu/tracerace",
+  "deployedCodeCommit": "39a41a0201129e4652386f2005a52aa465dbcbc8",
+  "githubChecks": "https://github.com/d-wt-wu/tracerace/actions/runs/42530175907",
+  "checks": {
+    "unitContentRegression": 111,
+    "postgresApi": 22,
+    "safeCVariants": 36,
+    "typecheck": "passed",
+    "lint": "passed",
+    "webExport": "passed",
+    "nativeJavascriptExport": "passed",
+    "clientExportFilesScannedForPrivateValues": 72
+  },
+  "hosting": {
+    "provider": "Render",
+    "plan": "Free",
+    "region": "Ohio",
+    "database": "Neon Free, isolated beta-web branch",
+    "privateRuntimeRoleCannotCreateTables": true,
+    "manualDeploy": true
+  },
+  "google": {
+    "publicCallbackRegistered": true,
+    "publicAudience": "In production",
+    "browserSignIn": "passed",
+    "browserSignOut": "passed",
+    "browserReturningSignIn": "passed",
+    "serverScopes": ["email", "profile", "openid"],
+    "sessionReload": "passed"
+  },
+  "publicApiFixtureChecks": {
+    "checkedAt": "2026-11-08T22:20:59.500Z",
+    "origin": "https://tracerace.onrender.com",
+    "fixtureIdentity": "reserved local test identity; not a Google OAuth test",
+    "passwordSignupRejected": true,
+    "secureHttpOnlySession": true,
+    "privateProfile": true,
+    "cloudSaveRead": true,
+    "staleRevisionRejected": true,
+    "signoutRevoked": true,
+    "returningSessionRestored": true,
+    "accountDeletionCascaded": true,
+    "fixtureRemoved": true
+  },
+  "backupRestore": {
+    "verifiedAt": "2026-11-08T22:04:12.095Z",
+    "sourceBranch": "beta-web",
+    "restoreBranch": "restore-check-web",
+    "tables": 8,
+    "fixtureRows": 8,
+    "roundTripMatched": true,
+    "wrongTargetRejected": true,
+    "nonemptyTargetRejected": true,
+    "sessionsRestored": false,
+    "encrypted": true,
+    "artifactSHA256": "affffdcc2536bbaf93d041f01f8d7040f79338ae60ba767f82cfd94652e99ccf",
+    "temporaryRestoreBranchRemoved": true
+  },
+  "ownerProgressCarryover": {
+    "matchedGoogleIdentity": true,
+    "validatedObjectSave": true,
+    "privateRankingPreserved": true,
+    "developmentSaveUnchanged": true,
+    "verifiedLeagueXPNotCopied": true
+  },
+  "http": {
+    "/": {
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    "/health": {
+      "status": 200,
+      "type": "application/json"
+    },
+    "/privacy": {
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    "/support": {
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    "/manifest.webmanifest": {
+      "status": 200,
+      "type": "application/manifest+json"
+    },
+    "/app-icon.png": {
+      "status": 200,
+      "type": "image/png"
+    },
+    "/lesson/daily": {
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    "/.env.local": {
+      "status": 404,
+      "type": "text/plain; charset=UTF-8"
+    },
+    "/api/not-a-route": {
+      "status": 401,
+      "type": "application/json"
+    }
+  },
+  "mobileViewport": {
+    "width": 390,
+    "horizontalOverflow": false
+  },
+  "physicalPhoneTests": "not performed",
+  "storeSubmission": "not performed",
+  "productAnalytics": "not enabled",
+  "externalTesterResults": "not collected"
+}

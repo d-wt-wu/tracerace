@@ -1,6 +1,10 @@
 # Web beta
 
-Prepared November 8, 2026. This file is updated with deployment evidence after the public service is verified.
+Published and verified November 8, 2026: [TraceRace web beta](https://tracerace.onrender.com/). [Release evidence](evidence/web-beta.json) records checks and limitations.
+
+Google sign-in, sign-out and returning sign-in passed at the public origin. The owner’s previous practice was carried into a private beta account after matching the Google provider identity; the development save was unchanged. Google’s audience is In production, with the final callback, homepage and privacy URL registered. The public API rejected password signup and passed disposable-fixture tests for secure sessions, private profiles, cloud save/read, stale-revision rejection, sign-out revocation and deletion cascades. All fixture records were removed.
+
+The deployed code is commit `39a41a0201129e4652386f2005a52aa465dbcbc8`. Its [GitHub checks](https://github.com/d-wt-wu/tracerace/actions/runs/42530175907) passed: 111 unit/content/regression tests, 22 real PostgreSQL API tests, typecheck, lint, safe C comparisons and a web export. Native JavaScript exports also passed; no native binary or store submission was made. A 390px desktop browser viewport had no horizontal page overflow. Actual iPhone/Android testing and external tester feedback remain outstanding.
 
 ## Shape of the release
 

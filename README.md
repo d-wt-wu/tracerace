@@ -2,6 +2,8 @@
 
 Short CS challenges, visual C traces, and a slightly ridiculous rank ladder. Built by Wentao Wu with React Native, Expo SDK 57, TypeScript, Better Auth, Hono, Drizzle, and Lakebase Postgres on Neon.
 
+**Try the web beta:** [tracerace.onrender.com](https://tracerace.onrender.com/). Google sign-in and guest practice are available. Free hosting may need time to wake after inactivity.
+
 ## Web beta work in v0.4
 
 - Personalized three-question sessions combine overdue reviews with a new concept, using fresh variants. Early independent practice preserves the existing review interval; help brings the concept back sooner.
@@ -36,7 +38,7 @@ The example configuration contains public endpoints only. A fresh checkout needs
 
 - A new home layout with a lesson hero, daily activity, mixed practice, review shortcuts, and profile access.
 - Email/password sign-up and sign-in, session restoration, sign-out, and account deletion.
-- Google sign-in configured with an owned development OAuth client, on the local API and HTTPS development Function. The owner completed Google consent and the local browser callback on November 8, 2026. The signed-in session survived a reload, with the original 20 XP preserved. The native callback remains unverified. Apple sign-in is deferred at the owner's request.
+- Google sign-in configured with an owned development OAuth client, on the local API and HTTPS development Function. The owner completed Google consent and the local browser callback on November 8, 2026. The signed-in session survived a reload, with the previous practice save preserved. The native callback remains unverified. Apple sign-in is deferred at the owner's request.
 - Onboarding with a public nickname, private ranking visibility by default, and optional guest-progress import.
 - Account-specific device caches and automatic cloud backups of completed practice. Conflicting saves ask which copy to keep. Haptics and unfinished assessments stay with their device.
 - Profile editing, account sync status, ranking visibility, haptics, reset/restore, privacy information, and deletion controls in Settings.

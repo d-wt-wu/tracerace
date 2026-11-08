@@ -2,7 +2,7 @@
 
 ## Current status
 
-Email/password accounts, sessions, private cloud progress, optional guest import, profile settings, sign-out, and deletion are implemented. The owned Google web OAuth client is configured in the private server environment and the HTTPS development Function. Local and HTTPS authorization initialization passed with the correct callbacks, S256 PKCE, and only email/profile/openid scopes. On November 8, 2026, the owner completed Google consent and the local browser callback. The app showed account sync on and retained the original 20 XP after a reload. Apple is deferred at the owner's request. Password recovery and verification emails require an SMTP service and are currently unavailable.
+Email/password accounts, sessions, private cloud progress, optional guest import, profile settings, sign-out, and deletion are implemented. The owned Google web OAuth client is configured in the private server environment and the HTTPS development Function. Local and HTTPS authorization initialization passed with the correct callbacks, S256 PKCE, and only email/profile/openid scopes. On November 8, 2026, the owner completed Google consent and the local browser callback. The app showed account sync on and retained the previous practice save after a reload. Apple is deferred at the owner's request. Password recovery and verification emails require an SMTP service and are currently unavailable.
 
 The account backend is on the isolated `dev-accounts` branch. Keep main separate. Existing private `.env.local` values are already present on the owner's Mac and must not be shared or committed.
 

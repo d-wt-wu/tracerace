@@ -1,14 +1,14 @@
 # TraceRace release plan
 
-Reviewed November 8, 2026. This is a release plan, not evidence that a public deployment or store submission exists.
+Reviewed November 8, 2026. The [public web beta](https://tracerace.onrender.com/) is deployed. See [verified release evidence](WEB_RELEASE.md). The remaining steps below include real-phone tests, external testers and optional store distribution.
 
 ## Verified now
 
-- Google consent and the callback completed in the local browser. The session survived a reload, with 20 XP and one completed family preserved.
+- Google consent and the callback completed in the local browser. The session survived a reload, with the previous practice save preserved.
 - The local API and HTTPS development Function initiate Google authorization with the intended client, exact callback, S256 PKCE, and email/profile/openid scopes.
 - The account-owning Neon organization is on the Free plan, checked through the CLI. No plan upgrade was made.
 - Earlier v0.3 validation passed 100 unit/content/regression tests and 22 real PostgreSQL API tests. These were not all rerun for the documentation update.
-- The frontend remains a Mac-hosted development preview; the backend remains on `dev-accounts`. Main was not accessed or activated.
+- The web beta runs on Render Free with an isolated `beta-web` database branch. Development remains on `dev-accounts`. Main was not accessed or activated.
 
 ## Recommended order
 
