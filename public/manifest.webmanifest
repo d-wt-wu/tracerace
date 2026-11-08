@@ -1,0 +1,19 @@
+{
+  "id": "/",
+  "name": "TraceRace",
+  "short_name": "TraceRace",
+  "description": "Short CS practice, visual code traces and a daily review habit.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F8F5FF",
+  "theme_color": "#6654D9",
+  "icons": [
+    {
+      "src": "/app-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

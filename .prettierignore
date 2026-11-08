@@ -1,0 +1,8 @@
+node_modules/
+.expo/
+dist/
+dist-native/
+vendor/
+work/
+coverage/
+package-lock.json

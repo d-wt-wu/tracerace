@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: tracerace
+    runtime: node
+    plan: free
+    region: ohio
+    buildCommand: npm ci --include=dev && npm run build:web:release
+    startCommand: npm run serve:web
+    healthCheckPath: /health
+    autoDeployTrigger: off
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: TRACERACE_EMAIL_AUTH_ENABLED
+        value: 'false'
+      - key: TRACERACE_MODE
+        value: beta
+      - key: DATABASE_URL
+        sync: false
+      - key: TRACERACE_AUTH_SECRET
+        generateValue: true
+      - key: TRACERACE_SIGNING_KEY
+        generateValue: true
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
