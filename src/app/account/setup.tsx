@@ -26,7 +26,12 @@ export default function Setup() {
     [visible, setVisible] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState<string | null>(null);
-  const hasPractice = !!Object.keys(progress.skills).length || !!progress.assessments.length;
+  const hasPractice =
+    !!Object.keys(progress.skills).length ||
+    !!progress.assessments.length ||
+    !!Object.keys(progress.cscb07.concepts).length ||
+    !!Object.keys(progress.cscb07.written).length ||
+    !!Object.keys(progress.cscb07.papers).length;
   const finish = async () => {
     if (!sync.ready || busy) return;
     setBusy(true);

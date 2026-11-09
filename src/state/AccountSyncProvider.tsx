@@ -201,7 +201,13 @@ export function AccountSyncProvider({ children }: { children: React.ReactNode })
   }, [user, key, save]);
   const importGuest = useCallback(async () => {
     if (!user) throw new Error('Sign in first.');
-    if (Object.keys(getSnapshot().skills).length || getSnapshot().assessments.length)
+    if (
+      Object.keys(getSnapshot().skills).length ||
+      getSnapshot().assessments.length ||
+      Object.keys(getSnapshot().cscb07.concepts).length ||
+      Object.keys(getSnapshot().cscb07.written).length ||
+      Object.keys(getSnapshot().cscb07.papers).length
+    )
       throw new Error(
         'This account already has practice history. Your guest save is still safe on this device.',
       );

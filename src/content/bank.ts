@@ -5,6 +5,7 @@ import {
   type Topic,
   type UnitId,
 } from './starter';
+import { CSCB07_FAMILIES } from './cscb07';
 
 export const BANK_VERSION = 2;
 export const TOPICS: { id: Topic; title: string; short: string }[] = [
@@ -850,6 +851,7 @@ export const FAMILIES: Family[] = [
     },
     'scenario',
   ),
+  ...CSCB07_FAMILIES,
 ];
 export type QuestionRef = { id: string; seed: number; ticket?: string };
 export function questionMaterial(q: Challenge) {

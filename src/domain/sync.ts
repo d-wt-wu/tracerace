@@ -14,7 +14,9 @@ export function reconcileProgress(
 ) {
   const dirty = meta
     ? cloudSnapshot(local) !== meta.snapshot
-    : !!Object.keys(local.skills).length || !!local.assessments.length;
+    : !!Object.keys(local.skills).length ||
+      !!local.assessments.length ||
+      !!local.cscb07?.startedDay;
   const conflict =
     !forceAccount && !!remote.progress && dirty && remote.revision !== (meta?.revision ?? 0);
   return { conflict, useRemote: !!remote.progress && !conflict && (forceAccount || !dirty) };

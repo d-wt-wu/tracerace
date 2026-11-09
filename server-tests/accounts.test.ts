@@ -7,6 +7,7 @@ import { createApi } from '../server/api';
 import { databaseURL } from '../server/database-url';
 import { freshProgress, recordPractice } from '../src/state/progress';
 import { BANK_VERSION, makeQuestion } from '../src/content/bank';
+import { beginCourseSession, updateConcept } from '../src/domain/course';
 if (!process.env.DATABASE_URL || process.env.NEON_BRANCH === 'main')
   throw new Error('Account tests require a migrated development database.');
 const pool = new Pool({ connectionString: databaseURL(process.env.DATABASE_URL), max: 5 });
@@ -267,4 +268,61 @@ test('deleting an account cascades its progress and rankings while leaving other
   );
   assert.equal((await call('/api/account/progress', c.cookie, undefined, 'GET')).status, 401);
   assert.equal((await call('/api/account/profile', a.cookie, undefined, 'GET')).status, 200);
+});
+
+test('course drafts and paper answers round-trip privately while new C++ tickets grade on the server', async () => {
+  const owner = await signup('course-owner'),
+    other = await signup('course-other');
+  const progress = freshProgress();
+  progress.cscb07 = beginCourseSession(
+    updateConcept(progress.cscb07, 'values', (c) => ({ ...c, readAt: '2026-11-09T15:00:00Z' })),
+    'values',
+    'learn',
+    42,
+  );
+  progress.cscb07.startedDay = '2026-11-09';
+  progress.cscb07.written.assignment = {
+    answer: 'Node tmp{other}; swap(tmp); return *this;',
+    scaffold: 'blank',
+    submittedAt: null,
+    checks: [],
+    rating: 'unreviewed',
+  };
+  progress.cscb07.papers.a = {
+    minutes: 90,
+    startedAt: '2026-11-09T15:00:00Z',
+    submittedAt: null,
+    onPaper: false,
+    answers: { p0: '8 8' },
+    checks: {},
+  };
+  const saved = await call('/api/account/progress', owner.cookie, { progress, revision: 0 }, 'PUT');
+  assert.equal(saved.status, 200);
+  const returned = await (
+    await call('/api/account/progress', owner.cookie, undefined, 'GET')
+  ).json();
+  assert.deepEqual(returned.progress.cscb07, progress.cscb07);
+  assert.equal(
+    (await (await call('/api/account/progress', other.cookie, undefined, 'GET')).json()).progress,
+    null,
+  );
+  const profile = await call('/api/account/profile', owner.cookie, {
+    alias: 'CoursePrivateTest',
+    active: false,
+  });
+  assert.equal(profile.status, 201);
+  const issued = await call('/api/practice', owner.cookie, {
+    ids: ['b07-l1-alias'],
+    bankVersion: BANK_VERSION,
+  });
+  assert.equal(issued.status, 200);
+  const ref = (await issued.json()).refs[0],
+    q = makeQuestion(ref.id, ref.seed);
+  const graded = await call('/api/answers', owner.cookie, {
+    ticket: ref.ticket,
+    choice: q.expected,
+    assisted: false,
+  });
+  assert.equal(graded.status, 200);
+  assert.equal((await graded.json()).correct, true);
 });

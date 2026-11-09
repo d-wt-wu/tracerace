@@ -1,6 +1,7 @@
 import { traceAnswer, traceProgram } from '../engine/c';
 import { BASE_UNITS, type UnitId } from './starter';
 import { FAMILIES, makeQuestion } from './bank';
+import { CSCB07_UNITS } from './cscb07';
 export type { Challenge, Difficulty, Topic, UnitId } from './starter';
 export { TOPICS, FAMILIES, BANK_VERSION } from './bank';
 export const UNITS: {
@@ -59,6 +60,7 @@ export const UNITS: {
     icon: 'cube-outline',
   },
 ];
+UNITS.push(...CSCB07_UNITS);
 export const CHALLENGES = FAMILIES.map((f) => makeQuestion(f.id, 0));
 export const challengesFor = (unit: string) => CHALLENGES.filter((c) => c.unit === unit);
 export const correctChoice = (challenge: import('./starter').Challenge) => {

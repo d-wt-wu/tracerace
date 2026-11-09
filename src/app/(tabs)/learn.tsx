@@ -9,7 +9,8 @@ import { C, S } from '../../ui/theme';
 export default function Learn() {
   const { progress } = useProgress();
   const [difficulty, setDifficulty] = useState<Difficulty | 'all'>('all');
-  const completed = Object.keys(progress.skills).length,
+  const core = CHALLENGES.filter((q) => q.topic !== 'cscb07');
+  const completed = core.filter((q) => progress.skills[q.id]).length,
     due = dueIds(progress).length;
   const filter = difficulty === 'all' ? '' : '?difficulty=' + difficulty;
   return (
@@ -18,13 +19,13 @@ export default function Learn() {
         <Text style={S.eyebrow}>THE LEARNING PATH</Text>
         <Text style={S.title}>More ways{'\n'}to make it click.</Text>
         <Text style={S.text}>
-          {CHALLENGES.length} question families. Changing inputs, different answer positions, and a
+          {core.length} core question families. Changing inputs, different answer positions, and a
           reason to come back.
         </Text>
       </View>
       <View style={[S.between, { gap: 10 }]}>
         <Chip>
-          {completed}/{CHALLENGES.length} FAMILIES SOLVED
+          {completed}/{core.length} CORE FAMILIES SOLVED
         </Chip>
         <Pressable
           accessibilityRole="button"
@@ -36,6 +37,18 @@ export default function Learn() {
             {due ? due + ' due' : 'Review'}
           </Text>
         </Pressable>
+      </View>
+      <View style={[S.card, { gap: 12, backgroundColor: C.lavender }]}>
+        <Chip>CSCB07 MIDTERM COURSE</Chip>
+        <Text style={S.sectionTitle}>Learn first. Then test it from memory.</Text>
+        <Text style={[S.text, { fontSize: 12 }]}>
+          C++ foundations through iterators, with prerequisites, worked examples, written tasks, and
+          two paper sets.
+        </Text>
+        <Button
+          title="Open the 24-lesson course"
+          onPress={() => router.push('/course/cscb07' as '/')}
+        />
       </View>
       <View style={{ flexDirection: 'row', gap: 7 }}>
         {(['all', 'easy', 'medium', 'hard'] as const).map((level) => (
@@ -75,7 +88,7 @@ export default function Learn() {
         onPress={() => router.push(('/lesson/mixed' + filter) as '/lesson/[unit]')}
       />
       <View>
-        {UNITS.map((unit, i) => {
+        {UNITS.filter((u) => !u.id.startsWith('b07-')).map((unit, i) => {
           const all = challengesFor(unit.id),
             questions = all.filter((q) => difficulty === 'all' || q.difficulty === difficulty);
           if (!questions.length) return null;

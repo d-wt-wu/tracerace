@@ -9,9 +9,15 @@ export type UnitId =
   | 'structures'
   | 'complexity'
   | 'sql'
-  | 'systems';
+  | 'systems'
+  | 'b07-1'
+  | 'b07-2'
+  | 'b07-3'
+  | 'b07-4'
+  | 'b07-5'
+  | 'b07-6';
 export type Difficulty = 'easy' | 'medium' | 'hard';
-export type Topic = 'c' | 'algorithms' | 'structures' | 'complexity' | 'sql' | 'systems';
+export type Topic = 'c' | 'algorithms' | 'structures' | 'complexity' | 'sql' | 'systems' | 'cscb07';
 export type Choice = { value: string; label: string };
 export type Challenge = {
   id: string;
@@ -20,7 +26,7 @@ export type Challenge = {
   difficulty: Difficulty;
   topic: Topic;
   mode: 'trace' | 'reasoning';
-  language: 'C' | 'SQL' | 'pseudocode' | 'scenario';
+  language: 'C' | 'C++' | 'SQL' | 'pseudocode' | 'scenario';
   data?: Record<string, unknown>;
   rankTicket?: string;
   unit: UnitId;

@@ -4,6 +4,8 @@ import { CHALLENGES, type Challenge } from '../content/curriculum';
 import { makeQuestion } from '../content/bank';
 import type { AssessmentDraft, AssessmentResult } from '../domain/assessment';
 import { decodeProgress, freshProgress, recordPractice, type Progress } from './progress';
+import type { CourseProgress } from '../domain/course';
+import { coursePlan } from '../domain/course';
 const GUEST_KEY = '@tracerace/progress/v1';
 type Context = {
   progress: Progress;
@@ -20,6 +22,7 @@ type Context = {
   undoReset: () => Promise<void>;
   getSnapshot: () => Progress;
   replaceProgress: (next: Progress, backup?: boolean) => Promise<void>;
+  updateCourse: (updater: (course: CourseProgress) => CourseProgress) => void;
 };
 const Store = createContext<Context | null>(null);
 const ids = CHALLENGES.map((c) => c.id);
@@ -147,6 +150,16 @@ export function ProgressProvider({
     () => commit({ ...current.current, haptics: !current.current.haptics }),
     [commit],
   );
+  const updateCourse = useCallback(
+    (updater: (course: CourseProgress) => CourseProgress) => {
+      const cscb07 = updater(current.current.cscb07);
+      commit({
+        ...current.current,
+        cscb07: { ...cscb07, startedDay: cscb07.startedDay ?? coursePlan(cscb07).today },
+      });
+    },
+    [commit],
+  );
   const reset = useCallback(async () => {
     try {
       await writes.current;
@@ -181,6 +194,7 @@ export function ProgressProvider({
         progress,
         getSnapshot,
         replaceProgress,
+        updateCourse,
         loaded,
         storageNotice,
         canUndo,

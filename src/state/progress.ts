@@ -1,4 +1,5 @@
 import { BANK_VERSION, makeQuestion, type QuestionRef } from '../content/bank';
+import { decodeCourse, freshCourse, type CourseProgress } from '../domain/course';
 import type { Challenge } from '../content/curriculum';
 import type { AssessmentDraft, AssessmentResult } from '../domain/assessment';
 export type Skill = {
@@ -19,6 +20,7 @@ export type Progress = {
   rewards: Reward[];
   assessmentDraft: AssessmentDraft | null;
   assessments: AssessmentResult[];
+  cscb07: CourseProgress;
 };
 export const freshProgress = (): Progress => ({
   version: 2,
@@ -29,6 +31,7 @@ export const freshProgress = (): Progress => ({
   rewards: [],
   assessmentDraft: null,
   assessments: [],
+  cscb07: freshCourse(),
 });
 export const dateKey = (date = new Date()) =>
   [
@@ -162,6 +165,7 @@ export function decodeProgress(raw: string | null, ids: readonly string[]): Prog
     throw new Error('Invalid progress');
   const clean = freshProgress();
   clean.haptics = p.haptics !== false;
+  clean.cscb07 = decodeCourse(p.cscb07);
   for (const [id, s] of Object.entries(p.skills)) {
     if (!ids.includes(id)) continue;
     if (

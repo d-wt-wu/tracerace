@@ -35,6 +35,17 @@ export default function Assess() {
   };
   return (
     <Page>
+      <View style={[S.card, { gap: 10, backgroundColor: C.lavender }]}>
+        <Text style={[S.text, { fontSize: 12 }]}>
+          This is the general CS skill check. The CSCB07 midterm course has its own prerequisite
+          path, written work, and paper practice.
+        </Text>
+        <Button
+          title="Open CSCB07 midterm practice"
+          secondary
+          onPress={() => router.push('/course/cscb07' as '/')}
+        />
+      </View>
       <View style={{ gap: 9, marginTop: 8 }}>
         <Text style={S.eyebrow}>A SKILL CHECK, WITH PERSONALITY</Text>
         <Text style={S.title}>Meet your{'\n'}current form.</Text>

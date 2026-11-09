@@ -8,6 +8,29 @@ Built by [Wentao Wu](https://github.com/d-wt-wu), a Computer Science Co-op stude
 
 Guest practice works without an account or download. Google sign-in adds cloud saves. Free hosting can take about a minute to wake after inactivity.
 
+## CSCB07 midterm course
+
+**[Open C++ Foundations Through Iterators →](https://tracerace.onrender.com/course/cscb07)**
+
+The v0.5 course adds 24 beginner lessons, 96 initial practice items drawn from 69 reusable course question families, 12 longer written/coding tasks, and two different mixed paper sets. Lessons teach vocabulary and a worked statement-by-statement example before two guided and two fresh independent checks. A saved daily path starts from actual progress, with prerequisites, error repair, later retrieval, optional lecture-page references, and a complete coverage checklist.
+
+The working boundary is Lectures 1–5 and Lecture 6 through iterators, before System Modelling on page 3. The date is November 13, 2026; the paper timer defaults to a chosen 90-minute practice duration, not an official exam length. Course questions are original practice, not past exam questions. Private lecture PDFs are not published.
+
+Numeric/output questions and choices use checked template answers. Free-form C++ and explanations use explicit self-review rubrics, accept valid alternative solutions, and do not receive invented automatic grades or league XP. Read the [course implementation and limitations](docs/CSCB07_COURSE.md).
+
+### Where the code lives
+
+| Part                                       | Source                                                                    |
+| ------------------------------------------ | ------------------------------------------------------------------------- |
+| Frontend screens                           | [src/app](src/app), including [the course screens](src/app/course/cscb07) |
+| Reusable UI                                | [src/ui](src/ui)                                                          |
+| Course lessons and question templates      | [src/content/cscb07](src/content/cscb07)                                  |
+| Course review and scheduling               | [src/domain/course.ts](src/domain/course.ts)                              |
+| Backend, authentication, and account saves | [server](server)                                                          |
+| Database schema and migrations             | [server/db](server/db)                                                    |
+
+Both frontend and backend are in this repository. Render runs a deployed copy; changing code requires checks and a deployment before the public app updates. Server secrets and account data are excluded from GitHub.
+
 ## Try it in two minutes
 
 1. Open the app and select **Learn → Follow the value**.
@@ -25,7 +48,7 @@ Actual web beta screenshots, captured November 8, 2026 in a resized desktop brow
 
 ## What it does
 
-- **36 question families across nine units**, with Easy/Medium/Hard labels, seeded input variants, hints, and explanations. Topics cover C memory, algorithms, data structures, complexity, SQL, and systems reasoning.
+- **36 core question families across nine units**, plus **69 CSCB07 C++ families**. Easy/Medium/Hard labels, seeded input variants, hints, and explanations cover the general CS track and the separate midterm course.
 - **Visual C execution:** a tokenizer, Pratt parser, and bounded interpreter produce statement-by-statement variable and memory snapshots. Teaching faults explain unsafe accesses without executing unsafe native code.
 - **Personalized daily three:** overdue reviews come first, followed by a new concept. Independent early practice preserves the review interval; help brings the concept back sooner.
 - **Separate skill and activity rankings:** an 18-question, six-topic weighted assessment and a weekly XP board. Nicknames and ranking visibility are optional; profiles start private.
@@ -88,7 +111,7 @@ npm run check
 npm run test:api
 ```
 
-`check` covers formatting, TypeScript, unit/content/regression tests, safe C reference comparisons, lint, and a web export. API tests need a migrated test database, refuse the `main` branch, and remove only their own test records. CI provisions its own PostgreSQL service.
+`check` covers formatting, TypeScript, unit/content/regression tests, safe C and C++20 compiler reference checks, named-module checks, lint, and a web export. API tests need a migrated test database, refuse the `main` branch, and remove only their own test records. CI provisions its own PostgreSQL service.
 
 ## Scope and limits
 

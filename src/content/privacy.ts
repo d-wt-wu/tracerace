@@ -1,4 +1,4 @@
-export const PRIVACY_UPDATED = 'November 8, 2026';
+export const PRIVACY_UPDATED = 'November 9, 2026';
 export const SUPPORT_URL = 'https://www.linkedin.com/in/david-wentao-wu/';
 export const privacySections = [
   [
@@ -18,6 +18,10 @@ export const privacySections = [
   [
     'Your progress and public rankings',
     'Signed-in completed practice is backed up to your account. Assessment scores, review history and cloud-save revisions are stored with that account. Unfinished assessments stay on the original device. Public rankings are optional and show your chosen nickname, weekly XP and latest ranked assessment score. Your email and detailed answers are not displayed on the boards.',
+  ],
+  [
+    'Course study and written answers',
+    'Course progress includes lesson attempts, incorrect answers, hint use, review dates, and saved written or paper-practice responses. These stay on this device for guests and are included in private account progress backups when signed in. Self-review ratings are distinguished from automatically checked answers. They are not public ranking data. The app does not upload your lecture PDFs or run arbitrary submitted C++ code. Avoid entering passwords or unrelated private information in practice answers.',
   ],
   [
     'Why data is stored',

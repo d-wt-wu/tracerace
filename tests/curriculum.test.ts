@@ -5,7 +5,8 @@ import { traceAnswer, traceProgram } from '../src/engine/c';
 
 test('curriculum IDs and units are valid and unique', () => {
   assert.equal(new Set(CHALLENGES.map((c) => c.id)).size, CHALLENGES.length);
-  assert.equal(UNITS.length, 9);
+  assert.equal(UNITS.filter((u) => !u.id.startsWith('b07-')).length, 9);
+  assert.equal(UNITS.filter((u) => u.id.startsWith('b07-')).length, 6);
   for (const u of UNITS) assert.ok(challengesFor(u.id).length >= 3);
   for (const c of CHALLENGES) assert.ok(UNITS.some((u) => u.id === c.unit));
 });

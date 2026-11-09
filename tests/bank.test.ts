@@ -8,8 +8,9 @@ import {
   selectPractice,
 } from '../src/content/bank';
 import { traceProgram, traceAnswer } from '../src/engine/c';
-test('all 36 families produce labelled, deterministic, valid variants across 128 seeds', () => {
-  assert.equal(FAMILIES.length, 36);
+test('all core and course families produce labelled, deterministic, valid variants across 128 seeds', () => {
+  assert.equal(FAMILIES.filter((f) => f.topic !== 'cscb07').length, 36);
+  assert.ok(FAMILIES.filter((f) => f.topic === 'cscb07').length >= 60);
   for (const family of FAMILIES)
     for (let seed = 0; seed < 128; seed++) {
       const q = makeQuestion(family.id, seed);

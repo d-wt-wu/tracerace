@@ -1,6 +1,6 @@
 {
   "name": "tracerace",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "main": "expo-router/entry",
   "dependencies": {
     "@better-auth/drizzle-adapter": "1.7.18",
@@ -59,7 +59,7 @@
     "test": "node --import tsx --test tests/*.test.ts",
     "verify:c": "node --import tsx scripts/verify-c.ts",
     "build:web": "node --import tsx scripts/build-public.ts && expo export --platform web",
-    "check": "npm run format:check && npm run typecheck && npm test && npm run verify:c && npm run lint && npm run build:web",
+    "check": "npm run format:check && npm run typecheck && npm test && npm run verify:c && npm run verify:cpp && npm run lint && npm run build:web",
     "format": "prettier --write src server server-tests tests scripts docs neon.ts drizzle.config.ts README.md app.json package.json tsconfig.json eslint.config.js .github/workflows/check.yml .prettierrc.json",
     "format:check": "prettier --check src server server-tests tests scripts docs neon.ts drizzle.config.ts README.md app.json package.json tsconfig.json eslint.config.js .github/workflows/check.yml .prettierrc.json",
     "api": "node --env-file-if-exists=.env.local --import tsx server/local.ts",
@@ -69,7 +69,8 @@
     "smoke:api": "node --env-file-if-exists=.env.local --import tsx scripts/smoke-api.ts",
     "smoke:accounts": "node --env-file-if-exists=.env.local --import tsx scripts/smoke-accounts.ts",
     "build:web:release": "node --import tsx scripts/build-public.ts && node scripts/build-web-release.mjs",
-    "serve:web": "node --import tsx server/web.ts"
+    "serve:web": "node --import tsx server/web.ts",
+    "verify:cpp": "node --import tsx scripts/verify-cpp.ts"
   },
   "private": true,
   "engines": {

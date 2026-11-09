@@ -11,6 +11,7 @@ import { RankCard } from '../../ui/ranks';
 import { skillRank } from '../../domain/ranks';
 import { dailyPlan } from '../../domain/daily';
 import { C, S } from '../../ui/theme';
+import { CSCB07_LESSONS } from '../../content/cscb07/lessons';
 export default function Today() {
   const { progress } = useProgress(),
     auth = useAuth();
@@ -70,6 +71,26 @@ export default function Today() {
           {count >= 3
             ? 'Daily goal done. Curiosity doesn’t have a limit.'
             : 'A few minutes. A few puzzles. One idea that clicks.'}
+        </Text>
+      </View>
+      <View style={[S.card, { gap: 12, backgroundColor: C.lavender }]}>
+        <View style={S.between}>
+          <Chip>CSCB07 · C++20</Chip>
+          <Text style={{ fontSize: 10, color: C.purple }}>NOV 13 MIDTERM</Text>
+        </View>
+        <Text style={S.sectionTitle}>Foundations through iterators.</Text>
+        <Text style={[S.text, { fontSize: 12 }]}>
+          24 beginner lessons, fresh practice, and blank-paper problems. Your study path starts from
+          your actual progress.
+        </Text>
+        <Button
+          title="Open my CSCB07 study path"
+          icon="arrow-forward"
+          onPress={() => router.push('/course/cscb07' as '/')}
+        />
+        <Text style={{ fontSize: 10, color: C.muted }}>
+          {CSCB07_LESSONS.filter((l) => progress.cscb07.concepts[l.id]?.completedAt).length}/24
+          lessons practiced
         </Text>
       </View>
       <LinearGradient
