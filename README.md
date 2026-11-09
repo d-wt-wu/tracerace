@@ -1,26 +1,77 @@
 # TraceRace
 
-Short CS challenges, visual C traces, and a slightly ridiculous rank ladder. Built by Wentao Wu with React Native, Expo SDK 57, TypeScript, Better Auth, Hono, Drizzle, and Lakebase Postgres on Neon.
+Short computer science practice for a phone-sized screen. Predict what a small program does, step through its memory, and come back to the ideas that need another look.
 
-**Try the web beta:** [tracerace.onrender.com](https://tracerace.onrender.com/). Google sign-in and guest practice are available. Free hosting may need time to wake after inactivity.
+Built by [Wentao Wu](https://github.com/d-wt-wu), a Computer Science Co-op student at the University of Toronto Scarborough.
 
-## Web beta work in v0.4
+**[Open the public web beta →](https://tracerace.onrender.com/)** · [Engineering case study](docs/CASE_STUDY.md) · [Verification evidence](docs/evidence/web-beta.json)
 
-- Personalized three-question sessions combine overdue reviews with a new concept, using fresh variants. Early independent practice preserves the existing review interval; help brings the concept back sooner.
-- A same-origin Node web server serves the Expo app and account API at one address. Public privacy and support pages load without signing in.
-- The public beta configuration offers Google and guest use. Password accounts remain available in development; verification/recovery delivery is required before broad password registration.
-- Beta data is isolated from development, with a restricted runtime database role. Encrypted app-data backups can be restored only to an empty, isolated restore-check target.
-- Home-screen metadata and a standalone manifest are included. This web beta requires a connection to load; it does not cache account responses or promise offline installation.
+Guest practice works without an account or download. Google sign-in adds cloud saves. Free hosting can take about a minute to wake after inactivity.
 
-See [web release](docs/WEB_RELEASE.md) for deployment instructions and verified release status. The Render configuration selects Free hosting; no custom domain or store purchase is needed for this beta.
+## Try it in two minutes
 
-## Run the development preview
+1. Open the app and select **Learn → Follow the value**.
+2. Predict the answer, then use **Trace the code → Next line** to watch variables change.
+3. Explore **Assess** for an 18-question skill check, or **Ranks** for the optional weekly league.
 
-Use Node.js 22 or newer. The owner's development checkout has a private `.env.local` with the development database and account settings. A fresh clone needs its own server environment.
+On iPhone, open the app in Safari and use **Share → Add to Home Screen**. Android Chrome offers **Install app** or **Add to Home screen** when available. A network connection is needed to load the web app and sync. [Help and privacy](https://tracerace.onrender.com/support).
+
+<p>
+  <img src="docs/preview/web-beta-home.jpg" alt="TraceRace daily practice screen in a 390-pixel browser viewport" width="230" />
+  <img src="docs/preview/web-beta-trace.jpg" alt="The C teaching interpreter showing that changing a does not change its copy b" width="230" />
+</p>
+
+Actual web beta screenshots, captured November 8, 2026 in a resized desktop browser.
+
+## What it does
+
+- **36 question families across nine units**, with Easy/Medium/Hard labels, seeded input variants, hints, and explanations. Topics cover C memory, algorithms, data structures, complexity, SQL, and systems reasoning.
+- **Visual C execution:** a tokenizer, Pratt parser, and bounded interpreter produce statement-by-statement variable and memory snapshots. Teaching faults explain unsafe accesses without executing unsafe native code.
+- **Personalized daily three:** overdue reviews come first, followed by a new concept. Independent early practice preserves the review interval; help brings the concept back sooner.
+- **Separate skill and activity rankings:** an 18-question, six-topic weighted assessment and a weekly XP board. Nicknames and ranking visibility are optional; profiles start private.
+- **Account-aware progress:** Google sign-in, guest-progress import, cloud save conflicts, session restoration, sign-out, and account deletion with cascading removal of synced records.
+
+## Engineering choices
+
+| Problem                                   | Implementation                                                                                                                                                                          |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Explain code without a remote code runner | A deterministic C teaching model runs in the client. The same snapshots drive the answer explanation and visualizer. It does not use `eval`.                                            |
+| Keep browser accounts on one origin       | A Node server serves the Expo web export and Hono/Better Auth API together; browser sessions use HttpOnly cookies.                                                                      |
+| Avoid trusting a submitted XP number      | Expiring HMAC question tickets bind the player, family, seed, and bank version. The server grades answers; row locks and uniqueness constraints make concurrent submissions idempotent. |
+| Avoid silently losing a cloud save        | Revision checks reject stale writes and ask the user which copy to keep. Device-only assessment drafts and haptics stay local.                                                          |
+| Recover persistent app data               | Transactionally consistent AES-256-GCM backups restore only into an empty, isolated restore-check target with matching migration hashes. Sessions are excluded.                         |
+
+**Stack:** TypeScript · React Native · Expo SDK 57 · Expo Router · Hono · Better Auth · Drizzle ORM · PostgreSQL on Neon · Render · GitHub Actions.
+
+```mermaid
+flowchart LR
+    A[Expo / React Native Web] -->|Same-origin HTTPS| B[Node + Hono API]
+    A --> C[Local question bank and C interpreter]
+    B --> D[Better Auth / Google]
+    B --> E[PostgreSQL on Neon]
+    F[GitHub Actions] --> G[Typecheck, tests, lint, web export]
+```
+
+## Verification
+
+The [deployed code's GitHub checks](https://github.com/d-wt-wu/tracerace/actions/runs/42530175907) passed on November 8, 2026:
+
+- **111 unit, content, and regression tests**, plus **22 real PostgreSQL API integration tests**.
+- **36 sampled defined-behavior C variants** compiled with clang C17 and compared against the teaching model. Undefined-behavior lessons are never executed as native C.
+- TypeScript, lint, production web export, generated SQL checks against PostgreSQL, and native JavaScript exports.
+- Public-origin Google sign-in, sign-out, returning sign-in, session reload, cloud-save conflict rejection, and disposable-account deletion checks.
+- An encrypted backup/restore round trip across eight persistent tables, with wrong-target and nonempty-target rejection.
+
+These are implementation checks, not user counts or measured learning outcomes. See the [release evidence](docs/evidence/web-beta.json) for scope and remaining gaps.
+
+## Run locally
+
+Use Node.js 22 or newer and a separate development PostgreSQL database. Copy the example environment and fill in your own server settings; never commit the completed file. [Account and database setup](docs/AUTH_SETUP.md).
 
 ```sh
 npm ci
 cp -n .env.example .env.local
+npm run db:migrate
 npm run api
 ```
 
@@ -30,60 +81,24 @@ In a second terminal:
 npm run web -- --localhost --port 8081
 ```
 
-Open http://localhost:8081/. The browser uses http://localhost:8787 for the API. Keep both on localhost so browser session cookies work. A separate source copy is used for isolated browser QA, because concurrent Metro servers sharing a source directory can reuse environment-specific transforms.
-
-The example configuration contains public endpoints only. A fresh checkout needs its own server environment before `npm run api` will work. Never replace the private environment with the example. The HTTPS development Function is configured for native clients; a hosted web release needs a same-site API or auth proxy and an explicitly trusted web origin.
-
-## What is included in v0.3
-
-- A new home layout with a lesson hero, daily activity, mixed practice, review shortcuts, and profile access.
-- Email/password sign-up and sign-in, session restoration, sign-out, and account deletion.
-- Google sign-in configured with an owned development OAuth client, on the local API and HTTPS development Function. The owner completed Google consent and the local browser callback on November 8, 2026. The signed-in session survived a reload, with the previous practice save preserved. The native callback remains unverified. Apple sign-in is deferred at the owner's request.
-- Onboarding with a public nickname, private ranking visibility by default, and optional guest-progress import.
-- Account-specific device caches and automatic cloud backups of completed practice. Conflicting saves ask which copy to keep. Haptics and unfinished assessments stay with their device.
-- Profile editing, account sync status, ranking visibility, haptics, reset/restore, privacy information, and deletion controls in Settings.
-- Password recovery and email-verification delivery supported when an SMTP service is configured. These emails are not enabled in the current development preview.
-- Guest practice remains available, and the original local progress key is preserved.
-
-The existing learning features remain: 36 original question families across nine units; Easy/Medium/Hard labels and reusable seeded variants; hints and explanations; a bounded C visualizer; weekly server-verified XP rankings; and a separate 18-question weighted skill assessment.
-
-## Verify
+Open http://localhost:8081/. The local API uses http://localhost:8787; keep both on localhost for browser cookies. Google login needs your own OAuth client and registered callback. Guest practice does not need a Google account.
 
 ```sh
 npm run check
 npm run test:api
 ```
 
-`check` runs formatting, TypeScript, unit/content/regression tests, 36 safe C variant comparisons against clang C17, lint, and a production web export. The three undefined-behavior C families are teaching-model tests and are never executed as native C.
+`check` covers formatting, TypeScript, unit/content/regression tests, safe C reference comparisons, lint, and a web export. API tests need a migrated test database, refuse the `main` branch, and remove only their own test records. CI provisions its own PostgreSQL service.
 
-API tests require a migrated development database. They refuse `main`, exercise real PostgreSQL and real Better Auth sessions, and remove only their own test records. They cover ownership, conflicting saves, guest-ticket revocation, deletion cascades, concurrency, scoring, and generated SQL against PostgreSQL.
+## Scope and limits
 
-The GitHub check workflow is prepared. A local pass is not a claim that remote CI ran.
+- This is a **public web beta**. The React Native source is included, but no signed iOS/Android release or App Store/TestFlight distribution has been made. Actual phone testing and external tester feedback remain outstanding.
+- The web beta uses Free hosting and can sleep while idle. Home-screen metadata is included; there is no service worker caching private responses and no offline-installation promise.
+- The interpreter supports a curated C subset, uses illustrative addresses and 32-bit integers, and assumes allocation succeeds. It is not a conforming C compiler. [Engine limits](docs/ENGINE.md).
+- Difficulty is curated, not calibrated. Playful assessment titles are not percentiles or professional qualifications. Repeated content does not create unlimited XP. [Ranking rules](docs/RANKINGS.md).
+- Password registration stays disabled in the public beta until verification/recovery delivery is configured. Google and guest practice are available.
+- There are no fabricated competitors, download counts, retention figures, or measured learning gains. Product analytics are not enabled.
 
-## Accounts and the backend
+All lesson content and the teaching interpreter are original. Authentication and other dependencies are third-party software. `vendor/decode-uri-component` retains its upstream MIT license, with its ESM default export converted to CommonJS for the SDK 57 Router.
 
-Better Auth 1.7.18 runs inside the existing Hono API with its matching Expo plugin. Managed Auth was evaluated first; its supported plugin set does not include the required Expo integration. No existing managed accounts were migrated. The app keeps its Neon database and Function.
-
-The current working branch is `dev-accounts`, copied from `dev-ranks`. Main was not accessed or activated. Schema changes are versioned in `server/db/migrations`.
-
-Browser sessions use HttpOnly cookies. Native cookies use the Expo integration and SecureStore. The API checks server sessions and account ownership. Guest ranking tickets remain supported; claiming a guest profile rotates its old ticket. Account deletion cascades account progress and ranking records. Passwords are hashed by Better Auth, rather than by application code.
-
-The account secret, database URLs, OAuth secret, and optional mail credentials are server-only. Only EXPO_PUBLIC variables belong in the app bundle. The source archive omits local environments and installed dependencies.
-
-See [account setup](docs/AUTH_SETUP.md) for Google and email delivery, [release plan](docs/RELEASE_PLAN.md) for publishing gates and costs, [rankings](docs/RANKINGS.md) for scoring and privacy, and [engine limits](docs/ENGINE.md) for the C teaching model.
-
-## Phone testing and release status
-
-The browser preview runs on this Mac. It is not an App Store release. Test the new flows on actual iOS and Android devices before a beta. Social sign-in uses the `tracerace://` callback and needs a compatible development build; Expo Go is not the social-sign-in release path.
-
-Use the current [Expo setup guide](https://docs.expo.dev/get-started/start-developing/) and [development build guide](https://docs.expo.dev/develop/development-builds/introduction/). Do not create ios/ or android/ by hand.
-
-The current email-account mode is for development. Configure verification/recovery email, final Google callbacks, trusted production origins, and a deployment-specific trusted client-IP policy before opening account registration broadly. The default auth limiter falls back to a shared per-path budget when the runtime has no trusted IP header; it is not an edge DDoS control.
-
-## Attribution and limits
-
-All lesson content and the C interpreter are original. Difficulty is curated, not calibrated. Skill titles describe a short practice assessment, not a percentile or job qualification. Fixed-concept questions can repeat; shuffled choices do not create a new concept or a new XP reward.
-
-The C trace models supported examples, not all of C. Addresses are illustrative, integers are 32-bit, and allocation is assumed to succeed. Non-C questions are labelled separately.
-
-`vendor/decode-uri-component` retains the upstream MIT-licensed 0.5.1 decoder with its ESM default export converted to CommonJS for SDK 57's Router. Other overrides select patched glob, minimatch, and migration-tool esbuild versions. The decoder and authentication libraries are third-party code, separate from the original interpreter.
+[Web deployment and recovery](docs/WEB_RELEASE.md) · [Release plan](docs/RELEASE_PLAN.md) · [Report a bug](https://github.com/d-wt-wu/tracerace/issues/new)
